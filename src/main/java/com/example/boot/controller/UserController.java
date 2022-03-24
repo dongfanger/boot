@@ -71,9 +71,15 @@ public class UserController {
         }
     }
 
+    @ApiOperation("验证授权")
+    @RequestMapping(value = "/checkAuth", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('console:user:auth')")
+    public ResponseEntity<?> auth() {
+        return new ResponseEntity<>(CommonResult.success("true"), HttpStatus.OK);
+    }
+
     @ApiOperation("分页查询用户列表")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    @PreAuthorize("hasAuthority('console:user:list')")
     public ResponseEntity<?> listUser(@RequestParam(value = "keyword", defaultValue = "") String keyword,
                                       @RequestParam(value = "page", defaultValue = "1") Integer pageNum,
                                       @RequestParam(value = "perPage", defaultValue = "10") Integer pageSize) {

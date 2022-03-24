@@ -23,4 +23,14 @@ public class QueryTest {
             System.out.println(r);
         }
     }
+
+    @Test
+    public void listUserByPage() {
+        String url = "http://localhost:8070/api/users/list?keyword=don&page=1&perPage=10";
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<>(null, null);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, httpEntity, String.class);
+        assert responseEntity.getStatusCode().is2xxSuccessful();
+        System.out.println(responseEntity.getBody());
+    }
 }
