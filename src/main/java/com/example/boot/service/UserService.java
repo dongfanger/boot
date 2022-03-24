@@ -3,6 +3,7 @@ package com.example.boot.service;
 
 import com.example.boot.entity.response.UserResp;
 import com.example.boot.mbg.model.User;
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
@@ -15,14 +16,14 @@ public interface UserService {
 
 //    int createUser(User user);
 
-//    int updateUser(Long id, User user);
-//
-//    int deleteUser(Long id);
-//
-//    PageInfo<UserResp> listUser(String keyword, int pageNum, int pageSize);
-//
-//    UserResp getUser(Long id);
-//
+    User updateUser(Long id, User user);
+
+    int deleteUser(Long id);
+
+    PageInfo<UserResp> listUser(String keyword, int pageNum, int pageSize);
+
+    UserResp getUser(Long id);
+
 //    /**
 //     * 根据用户名获取后台管理员
 //     */

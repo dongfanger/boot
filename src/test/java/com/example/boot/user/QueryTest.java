@@ -16,6 +16,7 @@ public class QueryTest {
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<>(null, null);
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, httpEntity, String.class);
+        assert responseEntity.getStatusCode().is2xxSuccessful();
         JSONArray result = JSONObject.parseArray(responseEntity.getBody());
         assert result != null;
         for (Object r : result) {
