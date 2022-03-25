@@ -1,13 +1,29 @@
 package com.example.boot.config;
 
 
+import com.example.boot.component.JwtAuthenticationTokenFilter;
+import com.example.boot.component.RestAuthenticationEntryPoint;
+import com.example.boot.component.RestfulAccessDeniedHandler;
+import com.example.boot.entity.dto.BootUserDetails;
+import com.example.boot.mbg.model.User;
+import com.example.boot.service.UserService;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import javax.annotation.Resource;
 
 
 /**
@@ -20,13 +36,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
-    //    @Resource
-//    private UserService userService;
-//    @Resource
-//    private RestfulAccessDeniedHandler restfulAccessDeniedHandler;
-//    @Resource
-//    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-//
+    @Resource
+    private UserService userService;
+    @Resource
+    private RestfulAccessDeniedHandler restfulAccessDeniedHandler;
+    @Resource
+    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf()// 由于使用的是JWT，我们这里不需要csrf
@@ -61,46 +77,46 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 禁用缓存
         httpSecurity.headers().cacheControl();
-//        // 添加JWT filter
-//        httpSecurity.addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-//        //添加自定义未授权和未登录结果返回
-//        httpSecurity.exceptionHandling()
-//                .accessDeniedHandler(restfulAccessDeniedHandler)
-//                .authenticationEntryPoint(restAuthenticationEntryPoint);
+        // 添加JWT filter
+        httpSecurity.addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        //添加自定义未授权和未登录结果返回
+        httpSecurity.exceptionHandling()
+                .accessDeniedHandler(restfulAccessDeniedHandler)
+                .authenticationEntryPoint(restAuthenticationEntryPoint);
     }
-//
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(userDetailsService())
-//                .passwordEncoder(passwordEncoder());
-//    }
-//
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
-//
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        //获取登录用户信息
-//        return username -> {
-//            User user = userService.getUserByUsername(username);
-//            if (user != null) {
-//                return new BootUserDetails(user);
-//            }
-//            throw new UsernameNotFoundException("用户名或密码错误");
-//        };
-//    }
-//
-//    @Bean
-//    public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
-//        return new JwtAuthenticationTokenFilter();
-//    }
-//
-//    @Bean
-//    @Override
-//    public AuthenticationManager authenticationManagerBean() throws Exception {
-//        return super.authenticationManagerBean();
-//    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService())
+                .passwordEncoder(passwordEncoder());
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        //获取登录用户信息
+        return username -> {
+            User user = userService.getUserByUsername(username);
+            if (user != null) {
+                return new BootUserDetails(user);
+            }
+            throw new UsernameNotFoundException("用户名或密码错误");
+        };
+    }
+
+    @Bean
+    public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
+        return new JwtAuthenticationTokenFilter();
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
 
 }

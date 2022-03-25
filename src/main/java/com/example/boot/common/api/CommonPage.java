@@ -23,19 +23,15 @@ public class CommonPage<T> {
      * 将PageHelper分页后的list转为分页信息
      */
     public static <T> CommonPage<T> restPage(List<T> list) {
-        CommonPage<T> result = new CommonPage<T>();
         PageInfo<T> pageInfo = new PageInfo<T>(list);
-        result.setTotalPage(pageInfo.getPages());
-        result.setPageNum(pageInfo.getPageNum());
-        result.setPageSize(pageInfo.getPageSize());
-        result.setTotal(pageInfo.getTotal());
-        result.setList(pageInfo.getList());
-        result.setHasNextPage(pageInfo.isHasNextPage());
-        result.setHasPreviousPage(pageInfo.isHasPreviousPage());
-        return result;
+        return getResult(pageInfo);
     }
 
     public static <T> CommonPage<T> restPage(PageInfo<T> pageInfo) {
+        return getResult(pageInfo);
+    }
+
+    public static <T> CommonPage<T> getResult(PageInfo<T> pageInfo) {
         CommonPage<T> result = new CommonPage<T>();
         result.setTotalPage(pageInfo.getPages());
         result.setPageNum(pageInfo.getPageNum());
@@ -46,5 +42,4 @@ public class CommonPage<T> {
         result.setHasPreviousPage(pageInfo.isHasPreviousPage());
         return result;
     }
-
 }

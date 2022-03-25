@@ -2,6 +2,9 @@ package com.example.boot.controller;
 
 import com.example.boot.common.api.CommonPage;
 import com.example.boot.common.api.CommonResult;
+import com.example.boot.entity.request.PasswordReq;
+import com.example.boot.entity.request.UserLoginReq;
+import com.example.boot.entity.response.UserLoginResp;
 import com.example.boot.entity.response.UserResp;
 import com.example.boot.mbg.model.User;
 import com.example.boot.service.UserService;
@@ -11,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -93,39 +97,39 @@ public class UserController {
     public ResponseEntity<?> user(@PathVariable("id") Long id) {
         return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
     }
-//
-//    @ApiOperation(value = "登录以后返回token")
-//    @RequestMapping(value = "/login", method = RequestMethod.POST)
-//    public ResponseEntity<?> login(@RequestBody UserLoginReq userLoginReq, BindingResult result) {
-//        String username = userLoginReq.getUsername();
-//        String token = userService.login(username, userLoginReq.getPassword());
-//        if (token == null) {
-//            return new ResponseEntity<>(CommonResult.validateFailed("用户名或密码错误"), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//
-//        User user = userService.getUserByUsername(username);
-//        UserLoginResp userLoginResp = userService.getUserLoginResult(user);
-//        userLoginResp.setToken(token);
-//
-//        return new ResponseEntity<>(userLoginResp, HttpStatus.OK);
-//    }
-//
-//
-//    @ApiOperation("修改密码")
-//    @RequestMapping(value = "/passwords/set", method = RequestMethod.PUT)
-//    public ResponseEntity<?> updatePassword(@RequestHeader HttpHeaders headers,
-//                                            @RequestBody PasswordReq passwordReq) {
-//        Boolean isOldPasswordRight = userService.updatePassword(headers, passwordReq);
-//        if (!isOldPasswordRight) {
-//            return new ResponseEntity<>(CommonResult.validateFailed("旧密码错误"), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//        return new ResponseEntity<>("", HttpStatus.OK);
-//    }
-//
-//    @ApiOperation("重置密码")
-//    @RequestMapping(value = "/{id}/passwords/reset", method = RequestMethod.PUT)
-//    public ResponseEntity<?> resetPassword(@PathVariable("id") Long id) {
-//        String password = userService.resetPassword(id);
-//        return new ResponseEntity<>(CommonResult.success(password), HttpStatus.OK);
-//    }
+
+    @ApiOperation(value = "登录以后返回token")
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ResponseEntity<?> login(@RequestBody UserLoginReq userLoginReq) {
+        String username = userLoginReq.getUsername();
+        String token = userService.login(username, userLoginReq.getPassword());
+        if (token == null) {
+            return new ResponseEntity<>(CommonResult.validateFailed("用户名或密码错误"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        User user = userService.getUserByUsername(username);
+        UserLoginResp userLoginResp = userService.getUserLoginResult(user);
+        userLoginResp.setToken(token);
+
+        return new ResponseEntity<>(userLoginResp, HttpStatus.OK);
+    }
+
+
+    @ApiOperation("修改密码")
+    @RequestMapping(value = "/passwords/set", method = RequestMethod.PUT)
+    public ResponseEntity<?> updatePassword(@RequestHeader HttpHeaders headers,
+                                            @RequestBody PasswordReq passwordReq) {
+        Boolean isOldPasswordRight = userService.updatePassword(headers, passwordReq);
+        if (!isOldPasswordRight) {
+            return new ResponseEntity<>(CommonResult.validateFailed("旧密码错误"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
+    @ApiOperation("重置密码")
+    @RequestMapping(value = "/{id}/passwords/reset", method = RequestMethod.PUT)
+    public ResponseEntity<?> resetPassword(@PathVariable("id") Long id) {
+        String password = userService.resetPassword(id);
+        return new ResponseEntity<>(CommonResult.success(password), HttpStatus.OK);
+    }
 }

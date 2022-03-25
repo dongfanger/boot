@@ -1,9 +1,12 @@
 package com.example.boot.service;
 
 
+import com.example.boot.entity.request.PasswordReq;
+import com.example.boot.entity.response.UserLoginResp;
 import com.example.boot.entity.response.UserResp;
 import com.example.boot.mbg.model.User;
 import com.github.pagehelper.PageInfo;
+import org.springframework.http.HttpHeaders;
 
 import java.util.List;
 
@@ -14,8 +17,6 @@ import java.util.List;
 public interface UserService {
     List<User> listAllUser();
 
-//    int createUser(User user);
-
     User updateUser(Long id, User user);
 
     int deleteUser(Long id);
@@ -24,29 +25,15 @@ public interface UserService {
 
     UserResp getUser(Long id);
 
-//    /**
-//     * 根据用户名获取后台管理员
-//     */
-//    User getUserByUsername(String username);
-//
-    /**
-     * 注册功能
-     */
+    User getUserByUsername(String username);
+
     UserResp register(User user);
 
-//    /**
-//     * 登录功能
-//     *
-//     * @param username 用户名
-//     * @param password 密码
-//     * @return 生成的JWT的token
-//     */
-//    String login(String username, String password);
-//
-//
-//    UserLoginResp getUserLoginResult(User user);
-//
-//    Boolean updatePassword(HttpHeaders headers, PasswordReq passwordReq);
-//
-//    String resetPassword(Long id);
+    String login(String username, String password);
+
+    UserLoginResp getUserLoginResult(User user);
+
+    Boolean updatePassword(HttpHeaders headers, PasswordReq passwordReq);
+
+    String resetPassword(Long id);
 }
