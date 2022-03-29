@@ -2,6 +2,7 @@ package com.example.boot.common.api;
 
 import com.github.pagehelper.PageInfo;
 import lombok.Data;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -24,6 +25,11 @@ public class CommonPage<T> {
      */
     public static <T> CommonPage<T> restPage(List<T> list) {
         PageInfo<T> pageInfo = new PageInfo<T>(list);
+        return getResult(pageInfo);
+    }
+
+    public static <T> CommonPage<T> restPage(Page<T> page) {
+        PageInfo<T> pageInfo = new PageInfo<T>(page.getContent());
         return getResult(pageInfo);
     }
 

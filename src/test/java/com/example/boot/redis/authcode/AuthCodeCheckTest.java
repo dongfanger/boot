@@ -1,4 +1,4 @@
-package com.example.boot.member.authcode;
+package com.example.boot.redis.authcode;
 
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.RandomStringUtils;

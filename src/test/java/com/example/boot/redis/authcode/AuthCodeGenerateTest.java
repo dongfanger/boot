@@ -1,8 +1,5 @@
-package com.example.boot.member.authcode;
+package com.example.boot.redis.authcode;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.example.boot.user.QueryTest;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

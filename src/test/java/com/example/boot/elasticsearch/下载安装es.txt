@@ -1,0 +1,16 @@
+选择中文分词版本下载：
+https://github.com/medcl/elasticsearch-analysis-ik/releases
+选择es版本下载（要跟中文分词版本一致）：
+https://www.elastic.co/downloads/past-releases#elasticsearch
+解压后进入bin目录：
+elasticsearch-plugin install https://github.com/medcl/elasticsearch-analysis-ik/releases/download/vX.X.X/elasticsearch-analysis-ik-X.X.X.zip
+（mac: ./elasticsearch-plugin）
+启动es：
+elasticsearch
+（mac: ./elasticsearch）
+下载kibana（也是在es下载页选择）：
+https://www.elastic.co/downloads/past-releases#elasticsearch
+解压后进入bin目录
+启动kibana:
+kibana
+（mac: ./kibana）
