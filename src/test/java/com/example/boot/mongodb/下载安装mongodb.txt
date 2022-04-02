@@ -1,0 +1,12 @@
+https://www.runoob.com/mongodb/mongodb-osx-install.html
+https://blog.51cto.com/u_12020737/2838606
+
+https://www.mongodb.com/try/download
+
+brew install mongodb-community@4.4
+
+启动：
+brew services start mongodb-community@4.4
+
+客户端：
+https://studio3t.com/download-studio3t-free
